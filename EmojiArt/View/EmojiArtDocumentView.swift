@@ -8,14 +8,16 @@
 
 import SwiftUI
 
-struct ContentView: View {
+
+struct EmojiArtDocumentView: View {
+    
+     // //////////////////////////
+    //  MARK: COMPUTED PROPERTIES
+    
     var body: some View {
         Text("Hello, World!")
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+        
+        
+        
+    } // var body: some View {}
+} // struct ContentView: View {}
