@@ -14,6 +14,7 @@
 		09EE3B6B24DB1AA8006567A3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09EE3B6A24DB1AA8006567A3 /* Preview Assets.xcassets */; };
 		09EE3B6E24DB1AA8006567A3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09EE3B6C24DB1AA8006567A3 /* LaunchScreen.storyboard */; };
 		09EE3B7924DB1C53006567A3 /* EmojiArtDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EE3B7824DB1C53006567A3 /* EmojiArtDocument.swift */; };
+		09EE3B7B24DC7B77006567A3 /* EmojiArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EE3B7A24DC7B77006567A3 /* EmojiArt.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		09EE3B6D24DB1AA8006567A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		09EE3B6F24DB1AA8006567A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		09EE3B7824DB1C53006567A3 /* EmojiArtDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArtDocument.swift; sourceTree = "<group>"; };
+		09EE3B7A24DC7B77006567A3 /* EmojiArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArt.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 		09EE3B7624DB1AE9006567A3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				09EE3B7A24DC7B77006567A3 /* EmojiArt.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 			files = (
 				09EE3B6224DB1AA5006567A3 /* AppDelegate.swift in Sources */,
 				09EE3B6424DB1AA5006567A3 /* SceneDelegate.swift in Sources */,
+				09EE3B7B24DC7B77006567A3 /* EmojiArt.swift in Sources */,
 				09EE3B6624DB1AA5006567A3 /* EmojiArtDocumentView.swift in Sources */,
 				09EE3B7924DB1C53006567A3 /* EmojiArtDocument.swift in Sources */,
 			);

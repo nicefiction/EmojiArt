@@ -17,6 +17,12 @@ struct EmojiArtDocumentView: View {
     @ObservedObject var document: EmojiArtDocument
     
     
+    /* Control Panel
+     */
+    
+    private let defaultEmojiSize: CGFloat = 40.0
+    
+    
     
      // //////////////////////////
     //  MARK: COMPUTED PROPERTIES
@@ -30,7 +36,7 @@ struct EmojiArtDocumentView: View {
                             id : \.self) { emoji in
                                 
                                 Text(emoji)
-                                    .font(Font.system(.largeTitle))
+                                    .font(Font.system(size : self.defaultEmojiSize))
                                 
                     } // ForEach() {}
                 } // HStack {}
