@@ -23,7 +23,25 @@ struct EmojiArtDocumentView: View {
     
     var body: some View {
         
-        Text("Hello, World!")
+        VStack {
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(EmojiArtDocument.palette.map { String($0) } ,
+                            id : \.self) { emoji in
+                                
+                                Text(emoji)
+                                    .font(Font.system(.largeTitle))
+                                
+                    } // ForEach() {}
+                } // HStack {}
+            } // ScrollView(.horizontal) {}
+                .padding(.horizontal)
+            
+            
+            Rectangle()
+                .foregroundColor(Color.yellow)
+                .edgesIgnoringSafeArea([.horizontal , .bottom])
+        } // VStack {}
         
         
         

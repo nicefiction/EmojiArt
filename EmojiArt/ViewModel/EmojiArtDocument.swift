@@ -11,6 +11,17 @@ import SwiftUI
 
 class EmojiArtDocument: ObservableObject {
     
+     // /////////////////////////
+    //  MARK: PROPERTY OBSERVERS
+    
+
+    
+    
+    
+     // /////////////////
+    //  MARK: PROPERTIES
+    
+    static let palette: String = "🤞👻🌋🌞💞💦📚"
     
     
 } // class EmojiArtDocument: ObservableObject {}
