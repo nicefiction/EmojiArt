@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiArtDocumentView.swift
 //  EmojiArt
 //
 //  Created by Olivier Van hamme on 05/08/2020.
@@ -11,10 +11,18 @@ import SwiftUI
 
 struct EmojiArtDocumentView: View {
     
+     // ////////////////////////
+    //  MARK: PROPERTY WRAPPERS
+    
+    @ObservedObject var document: EmojiArtDocument
+    
+    
+    
      // //////////////////////////
     //  MARK: COMPUTED PROPERTIES
     
     var body: some View {
+        
         Text("Hello, World!")
         
         
