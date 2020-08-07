@@ -15,7 +15,7 @@ struct EmojiArt {
     //  MARK: PROPERTIES
     
     var backgroundURL: URL?
-    var emojis: [Emoji] = Array<Emoji>()
+    var emojis: [Emoji] = [Emoji]()
     private var uniqueEmojiID: Int = 0
     
     
@@ -34,6 +34,7 @@ struct EmojiArt {
         var x: Int
         var y: Int
         var size: Int
+        
         
         
          // //////////////////////////
