@@ -44,12 +44,41 @@ struct EmojiArtDocumentView: View {
                 .padding(.horizontal)
             
             
-            Rectangle()
-                .foregroundColor(Color.yellow)
+            Color.white // instead of Rectangle().foregroundColor(Color.white)
+                .overlay(
+                    Group {
+                        if self.document.backgroundImage != nil {
+                            Image(uiImage : self.document.backgroundImage!)
+                        } // if self.document.backgroundImage != nil {}
+                    } // Group {}
+            ) // .overlay()
                 .edgesIgnoringSafeArea([.horizontal , .bottom])
+                .onDrop(of : ["public.image"] ,
+                        isTargeted : nil) { providers , location in
+                            return self.drop(providers : providers)
+            } // .onDrop(of: , isTargeted:) {}
         } // VStack {}
-        
-        
-        
     } // var body: some View {}
+    
+    
+    
+     // //////////////
+    //  MARK: METHODS
+    
+    private func drop(providers: [NSItemProvider])
+        -> Bool {
+            
+            let found = providers.loadFirstObject(ofType : URL.self) { url in
+                print("Dropped \(url)")
+                self.document.setBackgroundURK(url)
+            } // let found = providers.loadFirstObject(ofType: URL.self)}
+            
+            return found
+    } // private func drop(providers: [NSItemProvider]) -> Bool {}
+    
+    
+    
+    
+    
+    
 } // struct ContentView: View {}

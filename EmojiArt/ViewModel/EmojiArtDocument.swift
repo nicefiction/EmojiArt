@@ -15,6 +15,7 @@ class EmojiArtDocument: ObservableObject {
     //  MARK: PROPERTY OBSERVERS
     
     @Published private var emojiArt: EmojiArt = EmojiArt()
+    @Published private(set) var backgroundImage: UIImage?
 
     
     
@@ -67,6 +68,21 @@ class EmojiArtDocument: ObservableObject {
     } // func setBackgroundURK(_ url: URL?) {}
     
     
+    private func fetchBackgroundImageData() {
+        
+        backgroundImage = nil
+        if
+            let url = self.emojiArt.backgroundURL {
+            DispatchQueue.global(qos : .userInitiated).async {
+                if
+                    let imageData = try? Data(contentsOf : url) {
+                    DispatchQueue.main.async {
+                        self.backgroundImage = UIImage(data : imageData)
+                    } // DispatchQueue.main.async {}
+                } // if let umageData {}
+            } // DispatchQueue.global(qos : .userInitiated).async {}
+        } // if let url {}
+    } // private func fetchBackgroundImageData() {}
     
     
     
