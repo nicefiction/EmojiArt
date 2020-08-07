@@ -65,21 +65,25 @@ class EmojiArtDocument: ObservableObject {
     
     func setBackgroundURK(_ url: URL?) {
         emojiArt.backgroundURL = url?.imageURL
+        
+        fetchBackgroundImageData()
     } // func setBackgroundURK(_ url: URL?) {}
     
     
     private func fetchBackgroundImageData() {
-        
         backgroundImage = nil
+        
         if
             let url = self.emojiArt.backgroundURL {
             DispatchQueue.global(qos : .userInitiated).async {
                 if
                     let imageData = try? Data(contentsOf : url) {
                     DispatchQueue.main.async {
-                        self.backgroundImage = UIImage(data : imageData)
+                        if url == self.emojiArt.backgroundURL {
+                            self.backgroundImage = UIImage(data : imageData)
+                        } // if url == self.emojiArt.backgroundURL {}
                     } // DispatchQueue.main.async {}
-                } // if let umageData {}
+                } // if let imageData {}
             } // DispatchQueue.global(qos : .userInitiated).async {}
         } // if let url {}
     } // private func fetchBackgroundImageData() {}
