@@ -37,6 +37,7 @@ struct EmojiArtDocumentView: View {
                                 
                                 Text(emoji)
                                     .font(Font.system(size : self.defaultEmojiSize))
+                                    .onDrag { return NSItemProvider(object : emoji as NSString) }
                                 
                     } // ForEach() {}
                 } // HStack {}
@@ -44,19 +45,36 @@ struct EmojiArtDocumentView: View {
                 .padding(.horizontal)
             
             
-            Color.white // instead of Rectangle().foregroundColor(Color.white)
-                .overlay(
-                    Group {
-                        if self.document.backgroundImage != nil {
-                            Image(uiImage : self.document.backgroundImage!)
-                        } // if self.document.backgroundImage != nil {}
-                    } // Group {}
-            ) // .overlay()
-                .edgesIgnoringSafeArea([.horizontal , .bottom])
-                .onDrop(of : ["public.image"] ,
-                        isTargeted : nil) { providers , location in
-                            return self.drop(providers : providers)
-            } // .onDrop(of: , isTargeted:) {}
+            GeometryReader { geometry in
+                ZStack {
+                    Color.white // instead of Rectangle().foregroundColor(Color.white)
+                        .overlay(
+                            Group {
+                                if self.document.backgroundImage != nil {
+                                    Image(uiImage : self.document.backgroundImage!)
+                                } // if self.document.backgroundImage != nil {}
+                            } // Group {}
+                    ) // .overlay()
+                        .edgesIgnoringSafeArea([.horizontal , .bottom])
+                        .onDrop(of : ["public.image" , "public.text"] ,
+                                isTargeted : nil) { providers , location in
+                                    var location = geometry.convert(location , from : .global)
+                                    location = CGPoint(x : location.x - geometry.size.width/2 ,
+                                                       y : location.y - geometry.size.height/2)
+                                    
+                                    return self.drop(providers : providers ,
+                                                     at : location)
+                    } // .onDrop(of: , isTargeted:) {}
+                    
+                    
+                    ForEach(self.document.emojis) { emoji in
+                        Text(emoji.text)
+                            .font(self.font(for : emoji))
+                            .position(self.position(for : emoji ,
+                                                    in : geometry.size))
+                    } // ForEach(self.document.emojis) { emoji in }
+                } // ZStack {}
+            } // GeometryReader { geometry in }
         } // VStack {}
     } // var body: some View {}
     
@@ -65,19 +83,41 @@ struct EmojiArtDocumentView: View {
      // //////////////
     //  MARK: METHODS
     
-    private func drop(providers: [NSItemProvider])
+    private func drop(providers: [NSItemProvider] ,
+                      at location: CGPoint)
         -> Bool {
             
-            let found = providers.loadFirstObject(ofType : URL.self) { url in
+            var found = providers.loadFirstObject(ofType : URL.self) { url in
                 print("Dropped \(url)")
                 self.document.setBackgroundURK(url)
             } // let found = providers.loadFirstObject(ofType: URL.self)}
+            
+            if !found {
+                found = providers.loadObjects(ofType: String.self) { string in
+                    self.document.addEmoji(string ,
+                                           at : location ,
+                                           size : self.defaultEmojiSize)
+                } // found = providers.loadObjects(ofType: String.self) {}
+            } // if !found {}
             
             return found
     } // private func drop(providers: [NSItemProvider]) -> Bool {}
     
     
+    private func font(for emoji: EmojiArt.Emoji)
+        -> Font {
+            
+            Font.system(size : emoji.fontSize)
+    } // private func font(for emoji: EmojiArt.Emoji) -> Font {}
     
+    
+    private func position(for emoji: EmojiArt.Emoji ,
+                          in size: CGSize)
+        -> CGPoint {
+            
+            CGPoint(x : emoji.location.x + size.width/2 ,
+                    y : emoji.location.y + size.height/2)
+    } // private func position(for: : EmojiArt.Emoji , in size: CGSize) -> CGPoint {}
     
     
     

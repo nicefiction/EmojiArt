@@ -26,6 +26,15 @@ class EmojiArtDocument: ObservableObject {
     
     
     
+     // //////////////////////////
+    //  MARK: COMPUTED PROPERTIES
+    
+    var emojis: [EmojiArt.Emoji] {
+        return emojiArt.emojis
+    } // var emojis: [EmojiArt.Emoji] {}
+    
+    
+    
      // //////////////
     //  MARK: METHODS
     
@@ -90,4 +99,21 @@ class EmojiArtDocument: ObservableObject {
     
     
     
+    
+    
 } // class EmojiArtDocument: ObservableObject {}
+
+
+
+
+
+ // /////////////////
+//  MARK: EXTENSIONS
+
+extension EmojiArt.Emoji {
+    
+    var fontSize: CGFloat { CGFloat(self.size) }
+    var location: CGPoint { CGPoint(x : CGFloat(x) ,
+                                    y : CGFloat(y)) }
+    
+} // extension EmojiArt.Emoji {}
