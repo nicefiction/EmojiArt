@@ -1,15 +1,15 @@
-//
-//  EmojiArt.swift
-//  EmojiArt
-//
-//  Created by Olivier Van hamme on 06/08/2020.
-//  Copyright © 2020 nicefiction. All rights reserved.
-//
+/*
+ * EmojiArt.swift
+ * EmojiArt
+ *
+ * Created by Olivier Van hamme on 06/08/2020.
+ * Copyright © 2020 nicefiction. All rights reserved.
+ */
 
 import Foundation
 
 
-struct EmojiArt {
+struct EmojiArt: Codable {
     
      // /////////////////
     //  MARK: PROPERTIES
@@ -23,9 +23,10 @@ struct EmojiArt {
      // //////////////////
     //  MARK: NAMESPACING
     
-    struct Emoji: Identifiable {
+    struct Emoji: Identifiable ,
+                  Codable {
         
-        // /////////////////
+         // /////////////////
         //  MARK: PROPERTIES
         
         let id: Int
@@ -56,8 +57,12 @@ struct EmojiArt {
     
     
     
-     
+     // //////////////////////////
+    //  MARK: COMPUTED PROPERTIES
     
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
+    } // var json: Data? {}
     
     
     
