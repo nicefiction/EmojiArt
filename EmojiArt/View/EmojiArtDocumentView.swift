@@ -15,6 +15,7 @@ struct EmojiArtDocumentView: View {
     //  MARK: PROPERTY WRAPPERS
     
     @ObservedObject var document: EmojiArtDocument
+    @State private var zoomScale: CGFloat = 1.0
     
     
     /* Control Panel
@@ -47,9 +48,11 @@ struct EmojiArtDocumentView: View {
             
             GeometryReader { geometry in
                 ZStack {
-                    Color.white // instead of Rectangle().foregroundColor(Color.white)
+                    Color
+                        .white // instead of Rectangle().foregroundColor(Color.white)
                         .overlay(
                             OptionalImage(uiImage : self.document.backgroundImage)
+                                .scaleEffect(self.zoomScale)
                     ) // .overlay()
                     
                     
@@ -67,6 +70,8 @@ struct EmojiArtDocumentView: View {
                                 var location = geometry.convert(location , from : .global)
                                 location = CGPoint(x : location.x - geometry.size.width/2 ,
                                                    y : location.y - geometry.size.height/2)
+                                location = CGPoint(x : location.x / self.zoomScale ,
+                                                   y : location.y / self.zoomScale)
                                 
                                 return self.drop(providers : providers ,
                                                  at : location)
@@ -104,7 +109,7 @@ struct EmojiArtDocumentView: View {
     private func font(for emoji: EmojiArt.Emoji)
         -> Font {
             
-            Font.system(size : emoji.fontSize)
+            Font.system(size : emoji.fontSize * zoomScale)
     } // private func font(for emoji: EmojiArt.Emoji) -> Font {}
     
     
@@ -112,8 +117,13 @@ struct EmojiArtDocumentView: View {
                           in size: CGSize)
         -> CGPoint {
             
-            CGPoint(x : emoji.location.x + size.width/2 ,
-                    y : emoji.location.y + size.height/2)
+            var location = emoji.location
+            location = CGPoint(x : location.x * zoomScale ,
+                               y : location.y * zoomScale)
+            location = CGPoint(x : location.x + size.width/2 ,
+                               y : location.y + size.height/2)
+            
+            return location
     } // private func position(for: : EmojiArt.Emoji , in size: CGSize) -> CGPoint {}
     
     
