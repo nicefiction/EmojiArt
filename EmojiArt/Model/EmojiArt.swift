@@ -24,7 +24,8 @@ struct EmojiArt: Codable {
     //  MARK: NAMESPACING
     
     struct Emoji: Identifiable ,
-                  Codable {
+                  Codable ,
+                  Hashable {
         
          // /////////////////
         //  MARK: PROPERTIES
