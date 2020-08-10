@@ -14,7 +14,14 @@ class EmojiArtDocument: ObservableObject {
      // /////////////////////////
     //  MARK: PROPERTY OBSERVERS
     
-    @Published private var emojiArt: EmojiArt = EmojiArt()
+    @Published private var emojiArt: EmojiArt = EmojiArt() {
+        didSet {
+            print("json = \(emojiArt.json?.utf8 ?? "nil")")
+            UserDefaults.standard.set(emojiArt.json ,
+                                      forKey : "EmojiArtDocument.Untitled")
+        } // didSet {}
+    } // @Published private var emojiArt: EmojiArt = EmojiArt() {}
+    
     @Published private(set) var backgroundImage: UIImage?
 
     
