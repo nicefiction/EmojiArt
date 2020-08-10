@@ -15,7 +15,8 @@ struct EmojiArtDocumentView: View {
     //  MARK: PROPERTY WRAPPERS
     
     @ObservedObject var document: EmojiArtDocument
-    @State private var zoomScale: CGFloat = 1.0
+    @State private var steadyStateZoomScale: CGFloat = 1.0
+    @GestureState private var gestureZoomScale: CGFloat = 1.0
     
     
     /* Control Panel
@@ -27,6 +28,11 @@ struct EmojiArtDocumentView: View {
     
      // //////////////////////////
     //  MARK: COMPUTED PROPERTIES
+    
+    private var zoomScale: CGFloat {
+        steadyStateZoomScale * gestureZoomScale
+    } // private var zoomScale: CGFloat {}
+    
     
     var body: some View {
         
@@ -65,6 +71,7 @@ struct EmojiArtDocumentView: View {
                     } // ForEach(self.document.emojis) { emoji in }
                 } // ZStack {}
                     .clipped()
+                    .gesture(self.zoomGesture())
                     .edgesIgnoringSafeArea([.horizontal , .bottom])
                     .onDrop(of : ["public.image" , "public.text"] ,
                             isTargeted : nil) { providers , location in
@@ -131,7 +138,7 @@ struct EmojiArtDocumentView: View {
             
             let hZoom = size.width / image.size.width
             let vZoom = size.height / image.size.height
-            self.zoomScale = min(hZoom , vZoom)
+            self.steadyStateZoomScale = min(hZoom , vZoom)
             
         } // if let {}
     } // private func zoomToFit(_: UIImage ,in: CGSize) {}
@@ -150,6 +157,17 @@ struct EmojiArtDocumentView: View {
     } // private func doubleTapToZoom(in size: CGSize) -> some Gesture {}
     
     
+    private func zoomGesture()
+        -> some Gesture {
+        
+            MagnificationGesture()
+                .updating($gestureZoomScale) { latestGestureScale , ourGestureStateInOut , transaction in
+                    ourGestureStateInOut = latestGestureScale
+            } // .updating($gestureZoomScale) {}
+                .onEnded { finalGestureScale in
+                    self.steadyStateZoomScale *= finalGestureScale
+            } // .onEnded {}
+    } // private func zoomGesture() -> some Gesture {}
     
     
     
