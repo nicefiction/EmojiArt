@@ -66,6 +66,25 @@ struct EmojiArt: Codable {
     
     
     
+     // //////////////////////////
+    //  MARK: INITIALIZER METHODS
+    
+    init?(json: Data?) {
+        
+        if json != nil ,
+            let newEmojiArt = try? JSONDecoder().decode(EmojiArt.self ,
+                                                        from : json!) {
+            self = newEmojiArt
+        } else {
+            return nil
+        } // if {} else {}
+    } // init?(json: Data) {}
+    
+    
+    init() {}
+    
+    
+    
      // //////////////
     //  MARK: METHODS
     

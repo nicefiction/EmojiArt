@@ -14,11 +14,11 @@ class EmojiArtDocument: ObservableObject {
      // /////////////////////////
     //  MARK: PROPERTY OBSERVERS
     
-    @Published private var emojiArt: EmojiArt = EmojiArt() {
+    @Published private var emojiArt: EmojiArt {
         didSet {
             print("json = \(emojiArt.json?.utf8 ?? "nil")")
             UserDefaults.standard.set(emojiArt.json ,
-                                      forKey : "EmojiArtDocument.Untitled")
+                                      forKey : EmojiArtDocument.untitled)
         } // didSet {}
     } // @Published private var emojiArt: EmojiArt = EmojiArt() {}
     
@@ -30,6 +30,7 @@ class EmojiArtDocument: ObservableObject {
     //  MARK: PROPERTIES
     
     static let palette: String = "🤞👻🌋🌞💞💦📚"
+    private static let untitled: String = "EmojiArtDocument.Untitled"
     
     
     
@@ -39,6 +40,16 @@ class EmojiArtDocument: ObservableObject {
     var emojis: [EmojiArt.Emoji] {
         return emojiArt.emojis
     } // var emojis: [EmojiArt.Emoji] {}
+    
+    
+    
+     // //////////////////////////
+    //  MARK: INITIALIZER METHODS
+    
+    init() {
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey : EmojiArtDocument.untitled)) ?? EmojiArt()
+        fetchBackgroundImageData()   
+    } // init() {}
     
     
     
