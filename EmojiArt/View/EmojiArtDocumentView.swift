@@ -55,16 +55,6 @@ struct EmojiArtDocumentView: View {
                                 } // if self.document.backgroundImage != nil {}
                             } // Group {}
                     ) // .overlay()
-                        .edgesIgnoringSafeArea([.horizontal , .bottom])
-                        .onDrop(of : ["public.image" , "public.text"] ,
-                                isTargeted : nil) { providers , location in
-                                    var location = geometry.convert(location , from : .global)
-                                    location = CGPoint(x : location.x - geometry.size.width/2 ,
-                                                       y : location.y - geometry.size.height/2)
-                                    
-                                    return self.drop(providers : providers ,
-                                                     at : location)
-                    } // .onDrop(of: , isTargeted:) {}
                     
                     
                     ForEach(self.document.emojis) { emoji in
@@ -74,6 +64,17 @@ struct EmojiArtDocumentView: View {
                                                     in : geometry.size))
                     } // ForEach(self.document.emojis) { emoji in }
                 } // ZStack {}
+                    .clipped()
+                    .edgesIgnoringSafeArea([.horizontal , .bottom])
+                    .onDrop(of : ["public.image" , "public.text"] ,
+                            isTargeted : nil) { providers , location in
+                                var location = geometry.convert(location , from : .global)
+                                location = CGPoint(x : location.x - geometry.size.width/2 ,
+                                                   y : location.y - geometry.size.height/2)
+                                
+                                return self.drop(providers : providers ,
+                                                 at : location)
+                } // .onDrop(of: , isTargeted:) {}
             } // GeometryReader { geometry in }
         } // VStack {}
     } // var body: some View {}
