@@ -54,11 +54,12 @@ struct EmojiArtDocumentView: View {
                             OptionalImage(uiImage : self.document.backgroundImage)
                                 .scaleEffect(self.zoomScale)
                     ) // .overlay()
+                        .gesture(self.doubleTapToZoom(in : geometry.size))
                     
                     
                     ForEach(self.document.emojis) { emoji in
                         Text(emoji.text)
-                            .font(self.font(for : emoji))
+                            .font(animatableWithSize : emoji.fontSize * self.zoomScale)
                             .position(self.position(for : emoji ,
                                                     in : geometry.size))
                     } // ForEach(self.document.emojis) { emoji in }
@@ -106,13 +107,6 @@ struct EmojiArtDocumentView: View {
     } // private func drop(providers: [NSItemProvider]) -> Bool {}
     
     
-    private func font(for emoji: EmojiArt.Emoji)
-        -> Font {
-            
-            Font.system(size : emoji.fontSize * zoomScale)
-    } // private func font(for emoji: EmojiArt.Emoji) -> Font {}
-    
-    
     private func position(for emoji: EmojiArt.Emoji ,
                           in size: CGSize)
         -> CGPoint {
@@ -125,6 +119,37 @@ struct EmojiArtDocumentView: View {
             
             return location
     } // private func position(for: : EmojiArt.Emoji , in size: CGSize) -> CGPoint {}
+    
+    
+    private func zoomToFit(_ image: UIImage? ,
+                           in size: CGSize) {
+        
+        if
+            let image = image ,
+            image.size.width > 0 ,
+            image.size.height > 0 {
+            
+            let hZoom = size.width / image.size.width
+            let vZoom = size.height / image.size.height
+            self.zoomScale = min(hZoom , vZoom)
+            
+        } // if let {}
+    } // private func zoomToFit(_: UIImage ,in: CGSize) {}
+    
+    
+    private func doubleTapToZoom(in size: CGSize)
+        -> some Gesture {
+            
+            TapGesture(count : 2)
+                .onEnded {
+                    withAnimation {
+                        self.zoomToFit(self.document.backgroundImage ,
+                                       in : size)
+                    } // withAnimation {}
+            } // .onEnded {}
+    } // private func doubleTapToZoom(in size: CGSize) -> some Gesture {}
+    
+    
     
     
     
