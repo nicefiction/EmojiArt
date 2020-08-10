@@ -49,11 +49,7 @@ struct EmojiArtDocumentView: View {
                 ZStack {
                     Color.white // instead of Rectangle().foregroundColor(Color.white)
                         .overlay(
-                            Group {
-                                if self.document.backgroundImage != nil {
-                                    Image(uiImage : self.document.backgroundImage!)
-                                } // if self.document.backgroundImage != nil {}
-                            } // Group {}
+                            OptionalImage(uiImage : self.document.backgroundImage)
                     ) // .overlay()
                     
                     
