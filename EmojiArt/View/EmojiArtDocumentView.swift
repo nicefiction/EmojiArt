@@ -15,8 +15,12 @@ struct EmojiArtDocumentView: View {
     //  MARK: PROPERTY WRAPPERS
     
     @ObservedObject var document: EmojiArtDocument
+    
     @State private var steadyStateZoomScale: CGFloat = 1.0
+    @State private var steadyStatePanOffset: CGSize =  .zero
+    
     @GestureState private var gestureZoomScale: CGFloat = 1.0
+    @GestureState private var gesturePanOffset: CGSize = .zero
     
     
     /* Control Panel
@@ -32,6 +36,11 @@ struct EmojiArtDocumentView: View {
     private var zoomScale: CGFloat {
         steadyStateZoomScale * gestureZoomScale
     } // private var zoomScale: CGFloat {}
+    
+    
+    private var panOffset: CGSize {
+        (steadyStatePanOffset + gesturePanOffset) * zoomScale
+    } // private var panOffset: CGSize {}
     
     
     var body: some View {
@@ -59,6 +68,7 @@ struct EmojiArtDocumentView: View {
                         .overlay(
                             OptionalImage(uiImage : self.document.backgroundImage)
                                 .scaleEffect(self.zoomScale)
+                                .offset(self.panOffset)
                     ) // .overlay()
                         .gesture(self.doubleTapToZoom(in : geometry.size))
                     
@@ -71,6 +81,7 @@ struct EmojiArtDocumentView: View {
                     } // ForEach(self.document.emojis) { emoji in }
                 } // ZStack {}
                     .clipped()
+                    .gesture(self.panGesture())
                     .gesture(self.zoomGesture())
                     .edgesIgnoringSafeArea([.horizontal , .bottom])
                     .onDrop(of : ["public.image" , "public.text"] ,
@@ -78,6 +89,8 @@ struct EmojiArtDocumentView: View {
                                 var location = geometry.convert(location , from : .global)
                                 location = CGPoint(x : location.x - geometry.size.width/2 ,
                                                    y : location.y - geometry.size.height/2)
+                                location = CGPoint(x : location.x - self.panOffset.width ,
+                                                   y : location.y - self.panOffset.height)
                                 location = CGPoint(x : location.x / self.zoomScale ,
                                                    y : location.y / self.zoomScale)
                                 
@@ -123,6 +136,8 @@ struct EmojiArtDocumentView: View {
                                y : location.y * zoomScale)
             location = CGPoint(x : location.x + size.width/2 ,
                                y : location.y + size.height/2)
+            location = CGPoint(x : location.x + panOffset.width ,
+                               y : location.y + panOffset.height)
             
             return location
     } // private func position(for: : EmojiArt.Emoji , in size: CGSize) -> CGPoint {}
@@ -138,6 +153,7 @@ struct EmojiArtDocumentView: View {
             
             let hZoom = size.width / image.size.width
             let vZoom = size.height / image.size.height
+            self.steadyStatePanOffset = CGSize.zero
             self.steadyStateZoomScale = min(hZoom , vZoom)
             
         } // if let {}
@@ -168,6 +184,19 @@ struct EmojiArtDocumentView: View {
                     self.steadyStateZoomScale *= finalGestureScale
             } // .onEnded {}
     } // private func zoomGesture() -> some Gesture {}
+    
+    
+    private func panGesture()
+        -> some Gesture {
+            
+            DragGesture()
+                .updating($gesturePanOffset) { latestDragGestureValue , gesturePanOffset , transaction in
+                    gesturePanOffset = latestDragGestureValue.translation / self.zoomScale
+            } // .updating($gesturePanOffset) {}
+                .onEnded { finalDragGestureValue in
+                    self.steadyStatePanOffset = self.steadyStatePanOffset + (finalDragGestureValue.translation / self.zoomScale)
+            } // .onEnded { finalDragGestureValue in }
+    } // private func panGesture() -> some Gesture {}
     
     
     
