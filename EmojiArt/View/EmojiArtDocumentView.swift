@@ -77,7 +77,11 @@ struct EmojiArtDocumentView: View {
                     ) // .overlay()
                         .gesture(self.doubleTapToZoom(in : geometry.size))
                     
-                    if !self.isLoading {
+                    if self.isLoading {
+                        Image(systemName : "hourglass")
+                            .imageScale(.large)
+                            .spinning()
+                    } else {
                         ForEach(self.document.emojis) { emoji in
                             Text(emoji.text)
                                 .font(animatableWithSize : emoji.fontSize * self.zoomScale)
