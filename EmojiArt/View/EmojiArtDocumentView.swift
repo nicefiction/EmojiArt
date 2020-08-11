@@ -43,6 +43,11 @@ struct EmojiArtDocumentView: View {
     } // private var panOffset: CGSize {}
     
     
+    var isLoading: Bool {
+        document.backgroundURL != nil && document.backgroundImage == nil
+    } // var isLoading: Bool {}
+    
+    
     var body: some View {
         
         VStack {
@@ -72,13 +77,14 @@ struct EmojiArtDocumentView: View {
                     ) // .overlay()
                         .gesture(self.doubleTapToZoom(in : geometry.size))
                     
-                    
-                    ForEach(self.document.emojis) { emoji in
-                        Text(emoji.text)
-                            .font(animatableWithSize : emoji.fontSize * self.zoomScale)
-                            .position(self.position(for : emoji ,
-                                                    in : geometry.size))
-                    } // ForEach(self.document.emojis) { emoji in }
+                    if !self.isLoading {
+                        ForEach(self.document.emojis) { emoji in
+                            Text(emoji.text)
+                                .font(animatableWithSize : emoji.fontSize * self.zoomScale)
+                                .position(self.position(for : emoji ,
+                                                        in : geometry.size))
+                        } // ForEach(self.document.emojis) { emoji in }
+                    } // if !self.isloading {}
                 } // ZStack {}
                     .clipped()
                     .gesture(self.panGesture())
@@ -112,7 +118,7 @@ struct EmojiArtDocumentView: View {
             
             var found = providers.loadFirstObject(ofType : URL.self) { url in
                 print("Dropped \(url)")
-                self.document.setBackgroundURK(url)
+                self.document.backgroundURL = url
             } // let found = providers.loadFirstObject(ofType: URL.self)}
             
             if !found {

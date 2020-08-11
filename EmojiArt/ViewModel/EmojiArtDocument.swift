@@ -52,6 +52,18 @@ class EmojiArtDocument: ObservableObject {
     } // init() {}
     
     
+    var backgroundURL: URL? {
+        get {
+            emojiArt.backgroundURL
+        } // get {}
+        
+        set {
+            emojiArt.backgroundURL = newValue?.imageURL
+            fetchBackgroundImageData()
+        } // set {}
+    } // func setBackgroundURK(_ url: URL?) {}
+    
+    
     
      // //////////////
     //  MARK: METHODS
@@ -90,11 +102,6 @@ class EmojiArtDocument: ObservableObject {
     } // func scaleEmoji() {}
     
     
-    func setBackgroundURK(_ url: URL?) {
-        emojiArt.backgroundURL = url?.imageURL
-        
-        fetchBackgroundImageData()
-    } // func setBackgroundURK(_ url: URL?) {}
     
     
     private func fetchBackgroundImageData() {
