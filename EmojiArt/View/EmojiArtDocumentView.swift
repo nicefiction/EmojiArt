@@ -51,19 +51,22 @@ struct EmojiArtDocumentView: View {
     var body: some View {
         
         VStack {
-            ScrollView(.horizontal) {
-                HStack {
-                    ForEach(EmojiArtDocument.palette.map { String($0) } ,
-                            id : \.self) { emoji in
-                                
-                                Text(emoji)
-                                    .font(Font.system(size : self.defaultEmojiSize))
-                                    .onDrag { return NSItemProvider(object : emoji as NSString) }
-                                
-                    } // ForEach() {}
-                } // HStack {}
-            } // ScrollView(.horizontal) {}
-                .padding(.horizontal)
+            HStack {
+                PaletteChooser()
+                
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(EmojiArtDocument.palette.map { String($0) } ,
+                                id : \.self) { emoji in
+                                    
+                                    Text(emoji)
+                                        .font(Font.system(size : self.defaultEmojiSize))
+                                        .onDrag { return NSItemProvider(object : emoji as NSString) }
+                                    
+                        } // ForEach() {}
+                    } // HStack {}
+                } // ScrollView(.horizontal) {}
+            } // HStack {}
             
             
             GeometryReader { geometry in
