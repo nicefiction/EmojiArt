@@ -26,6 +26,7 @@ class EmojiArtDocument: ObservableObject {
     static let palette: String = "🤞👻🌋🌞💞💦📚"
     private static let untitled: String = "EmojiArtDocument.Untitled"
     private var autoSaveCancellable: AnyCancellable?
+    private var fetchImageCancellable: AnyCancellable?
     
     
     
@@ -110,16 +111,41 @@ class EmojiArtDocument: ObservableObject {
         
         if
             let url = self.emojiArt.backgroundURL {
-            DispatchQueue.global(qos : .userInitiated).async {
-                if
-                    let imageData = try? Data(contentsOf : url) {
-                    DispatchQueue.main.async {
-                        if url == self.emojiArt.backgroundURL {
-                            self.backgroundImage = UIImage(data : imageData)
-                        } // if url == self.emojiArt.backgroundURL {}
-                    } // DispatchQueue.main.async {}
-                } // if let imageData {}
-            } // DispatchQueue.global(qos : .userInitiated).async {}
+            // BAD CODE :
+//            DispatchQueue.global(qos : .userInitiated).async {
+//                if
+//                    let imageData = try? Data(contentsOf : url) {
+//                    DispatchQueue.main.async {
+//                        if url == self.emojiArt.backgroundURL {
+//                            self.backgroundImage = UIImage(data : imageData)
+//                        } // if url == self.emojiArt.backgroundURL {}
+//                    } // DispatchQueue.main.async {}
+//                } // if let imageData {}
+//            } // DispatchQueue.global(qos : .userInitiated).async {}
+            
+            fetchImageCancellable?.cancel() // Cancel the previous request if there is any .
+            
+            // URLSESSION CODE :
+//            let session = URLSession.shared
+//
+//            let publisher = session.dataTaskPublisher(for : url)
+//                .map { data , urlResponse in
+//                    UIImage(data : data)
+//            } // .map { data , urlResponse in }
+//                .receive(on : DispatchQueue.main)
+//                .replaceError(with : nil)
+//
+//            fetchImageCancellable = publisher.assign(to : \EmojiArtDocument.backgroundImage ,
+//                                                     on : self)
+            // REFACTORED CODE :
+            fetchImageCancellable = URLSession.shared.dataTaskPublisher(for : url)
+                .map { data , urlResponse in
+                    UIImage(data : data)
+            } // .map { data , urlResponse in }
+                .receive(on : DispatchQueue.main)
+                .replaceError(with : nil)
+                .assign(to : \EmojiArtDocument.backgroundImage ,
+                        on : self)
         } // if let url {}
     } // private func fetchBackgroundImageData() {}
     
