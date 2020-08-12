@@ -94,6 +94,11 @@ struct EmojiArtDocumentView: View {
                     .gesture(self.panGesture())
                     .gesture(self.zoomGesture())
                     .edgesIgnoringSafeArea([.horizontal , .bottom])
+                    .onReceive(self.document.$backgroundImage ,
+                               perform : { image in
+                                self.zoomToFit(image ,
+                                               in : geometry.size)
+                    })
                     .onDrop(of : ["public.image" , "public.text"] ,
                             isTargeted : nil) { providers , location in
                                 var location = geometry.convert(location , from : .global)
