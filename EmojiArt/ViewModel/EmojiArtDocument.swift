@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 
 class EmojiArtDocument: ObservableObject {
@@ -14,14 +15,7 @@ class EmojiArtDocument: ObservableObject {
      // /////////////////////////
     //  MARK: PROPERTY OBSERVERS
     
-    @Published private var emojiArt: EmojiArt {
-        didSet {
-            print("json = \(emojiArt.json?.utf8 ?? "nil")")
-            UserDefaults.standard.set(emojiArt.json ,
-                                      forKey : EmojiArtDocument.untitled)
-        } // didSet {}
-    } // @Published private var emojiArt: EmojiArt = EmojiArt() {}
-    
+    @Published private var emojiArt: EmojiArt
     @Published private(set) var backgroundImage: UIImage?
 
     
@@ -31,6 +25,7 @@ class EmojiArtDocument: ObservableObject {
     
     static let palette: String = "🤞👻🌋🌞💞💦📚"
     private static let untitled: String = "EmojiArtDocument.Untitled"
+    private var autoSaveCancellable: AnyCancellable?
     
     
     
@@ -48,6 +43,12 @@ class EmojiArtDocument: ObservableObject {
     
     init() {
         emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey : EmojiArtDocument.untitled)) ?? EmojiArt()
+        
+        autoSaveCancellable = $emojiArt.sink(receiveValue : { emojiArt in
+            print("json = \(emojiArt.json?.utf8 ?? "nil")")
+            UserDefaults.standard.set(emojiArt.json ,
+                                      forKey : EmojiArtDocument.untitled)
+        })
         fetchBackgroundImageData()   
     } // init() {}
     
