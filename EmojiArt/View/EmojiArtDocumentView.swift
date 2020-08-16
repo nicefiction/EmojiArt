@@ -18,6 +18,7 @@ struct EmojiArtDocumentView: View {
     
     @State private var steadyStateZoomScale: CGFloat = 1.0
     @State private var steadyStatePanOffset: CGSize =  .zero
+    @State private var chosenPalette: String = ""
     
     @GestureState private var gestureZoomScale: CGFloat = 1.0
     @GestureState private var gesturePanOffset: CGSize = .zero
@@ -52,11 +53,12 @@ struct EmojiArtDocumentView: View {
         
         VStack {
             HStack {
-                PaletteChooser()
+                PaletteChooser(document : document ,
+                               chosenPalette : $chosenPalette)
                 
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach(EmojiArtDocument.palette.map { String($0) } ,
+                        ForEach(chosenPalette.map { String($0) } ,
                                 id : \.self) { emoji in
                                     
                                     Text(emoji)
@@ -118,6 +120,16 @@ struct EmojiArtDocumentView: View {
             } // GeometryReader { geometry in }
         } // VStack {}
     } // var body: some View {}
+    
+    
+    
+     // /////////////////////////
+    //  MARK: INITIALSER METHODS
+    
+    init(document: EmojiArtDocument) {
+        self.document = document
+        _chosenPalette = State(wrappedValue : self.document.defaultPalette)
+    } // init() {}
     
     
     
