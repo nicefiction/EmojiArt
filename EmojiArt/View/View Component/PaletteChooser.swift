@@ -18,6 +18,8 @@ struct PaletteChooser: View {
     
     @Binding var chosenPalette: String
     
+    @State var isShowingPaletteEditor: Bool = false
+    
     
     
      // //////////////////////////
@@ -28,21 +30,70 @@ struct PaletteChooser: View {
         HStack {
             Stepper(
                 onIncrement : { self.chosenPalette = self.document.palette(after : self.chosenPalette) } ,
-                onDecrement : { self.chosenPalette = self.document.palette(before: self.chosenPalette) } ,
+                onDecrement : { self.chosenPalette = self.document.palette(before : self.chosenPalette) } ,
                 label : { EmptyView() })
             
             Text(self.document.paletteNames[self.chosenPalette] ?? "")
+            
+            Image(systemName: "keyboard")
+                .imageScale(.large)
+                .onTapGesture {
+                    self.isShowingPaletteEditor = true
+            } // .onTapGesture {}
+                .popover(isPresented : $isShowingPaletteEditor ,
+                         content : {
+                            PaletteEditor(chosenPalette : self.$chosenPalette)
+                                .environmentObject(self.document)
+                                .frame(minWidth : 300 ,
+                                       minHeight : 500)
+                }) // .popover(isPresented:) {}
         } // HStack {}
             .fixedSize(horizontal : true ,
                        vertical : false)
             .onAppear(perform : {
                 self.chosenPalette = self.document.defaultPalette
-            })
+            }) // .onAppear(perform: {})
         
         
         
     } // var body: some View {}
 } // struct PaletteChooser: View {}
+
+
+
+struct PaletteEditor: View {
+    
+     // ////////////////////////
+    //  MARK: PROPERTY WRAPPERS
+    
+    @EnvironmentObject var document: EmojiArtDocument
+    
+    @Binding var chosenPalette: String
+    
+    
+    
+     // //////////////////////////
+    //  MARK: COMPUTED PROPERTIES
+    
+    var body: some View {
+        VStack(spacing : 0) {
+            Text("Palette Editor")
+                .font(.headline)
+                .padding()
+            
+            Divider()
+            
+            Text("\(self.document.paletteNames[self.chosenPalette] ?? "")")
+                .padding()
+            
+            Spacer()
+        } // VStack {}
+     
+        
+        
+    } // var body: some View {}
+} // struct PaletteEditor: View {}
+
 
 
 
