@@ -70,6 +70,8 @@ struct PaletteEditor: View {
     
     @Binding var chosenPalette: String
     
+    @State var paletteName: String = ""
+    
     
     
      // //////////////////////////
@@ -83,11 +85,21 @@ struct PaletteEditor: View {
             
             Divider()
             
-            Text("\(self.document.paletteNames[self.chosenPalette] ?? "")")
+            TextField("Palette name" ,
+                      text : $paletteName ,
+                      onEditingChanged : { began in
+                        if !began {
+                            self.document.renamePalette(self.chosenPalette ,
+                                                        to : self.paletteName)
+                        } // if !began {}
+            }) // onEditingChanged : { began in }
                 .padding()
             
             Spacer()
         } // VStack {}
+        .onAppear(perform : {
+            self.paletteName = self.document.paletteNames[self.chosenPalette] ?? ""
+        }) // .onAppear(perform: {})
      
         
         
