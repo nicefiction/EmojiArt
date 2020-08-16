@@ -70,7 +70,8 @@ struct PaletteEditor: View {
     
     @Binding var chosenPalette: String
     
-    @State var paletteName: String = ""
+    @State private var paletteName: String = ""
+    @State private var emojisToAdd: String = ""
     
     
     
@@ -83,7 +84,9 @@ struct PaletteEditor: View {
                 .font(.headline)
                 .padding()
             
+            
             Divider()
+            
             
             TextField("Palette name" ,
                       text : $paletteName ,
@@ -94,6 +97,19 @@ struct PaletteEditor: View {
                         } // if !began {}
             }) // onEditingChanged : { began in }
                 .padding()
+            
+            
+            TextField("Add an emoji" ,
+                      text : $emojisToAdd ,
+                      onEditingChanged : { began in
+                        if !began {
+                            self.chosenPalette = self.document.addEmoji(self.emojisToAdd ,
+                                                                        toPalette: self.chosenPalette)
+                            self.emojisToAdd = ""
+                        } // if !began {}
+            }) // onEditingChanged : { began in }
+                .padding()
+           
             
             Spacer()
         } // VStack {}
