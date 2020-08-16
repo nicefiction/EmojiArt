@@ -104,10 +104,25 @@ struct PaletteEditor: View {
                           onEditingChanged : { began in
                             if !began {
                                 self.chosenPalette = self.document.addEmoji(self.emojisToAdd ,
-                                                                            toPalette: self.chosenPalette)
+                                                                            toPalette : self.chosenPalette)
                                 self.emojisToAdd = ""
                             } // if !began {}
                 }) // onEditingChanged : { began in }
+                
+                
+                Section(header : Text("Remove Emoji") ,
+                        content : {
+                            VStack {
+                                ForEach(chosenPalette.map({ String($0) }) ,
+                                        id : \.self) { emoji in
+                                            Text(emoji)
+                                                .onTapGesture {
+                                                    self.chosenPalette = self.document.removeEmoji(emoji ,
+                                                                                                   fromPalette : self.chosenPalette)
+                                            } // .onTapGesture {}
+                                } // ForEach()
+                            } // VStack {}
+                }) // Section(header: , content:) {}
             } // Form {}
         } // VStack {}
         .onAppear(perform : {
