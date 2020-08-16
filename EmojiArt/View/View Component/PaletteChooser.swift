@@ -88,30 +88,27 @@ struct PaletteEditor: View {
             Divider()
             
             
-            TextField("Palette name" ,
-                      text : $paletteName ,
-                      onEditingChanged : { began in
-                        if !began {
-                            self.document.renamePalette(self.chosenPalette ,
-                                                        to : self.paletteName)
-                        } // if !began {}
-            }) // onEditingChanged : { began in }
-                .padding()
-            
-            
-            TextField("Add an emoji" ,
-                      text : $emojisToAdd ,
-                      onEditingChanged : { began in
-                        if !began {
-                            self.chosenPalette = self.document.addEmoji(self.emojisToAdd ,
-                                                                        toPalette: self.chosenPalette)
-                            self.emojisToAdd = ""
-                        } // if !began {}
-            }) // onEditingChanged : { began in }
-                .padding()
-           
-            
-            Spacer()
+            Form {
+                TextField("Palette name" ,
+                          text : $paletteName ,
+                          onEditingChanged : { began in
+                            if !began {
+                                self.document.renamePalette(self.chosenPalette ,
+                                                            to : self.paletteName)
+                            } // if !began {}
+                }) // onEditingChanged : { began in }
+                
+                
+                TextField("Add an emoji" ,
+                          text : $emojisToAdd ,
+                          onEditingChanged : { began in
+                            if !began {
+                                self.chosenPalette = self.document.addEmoji(self.emojisToAdd ,
+                                                                            toPalette: self.chosenPalette)
+                                self.emojisToAdd = ""
+                            } // if !began {}
+                }) // onEditingChanged : { began in }
+            } // Form {}
         } // VStack {}
         .onAppear(perform : {
             self.paletteName = self.document.paletteNames[self.chosenPalette] ?? ""
