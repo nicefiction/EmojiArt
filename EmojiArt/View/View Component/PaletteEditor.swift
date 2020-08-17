@@ -21,6 +21,16 @@ struct PaletteEditor: View {
     @State private var paletteName: String = ""
     @State private var emojisToAdd: String = ""
     
+    /* Control Panel :
+     */
+    
+    var height : CGFloat {
+        CGFloat((chosenPalette.count - 1) / 6) * 70 + 70
+    } // let height : CGFloat {}
+    
+    
+    let fontSize: CGFloat = 38
+    
     
     
      // //////////////////////////
@@ -60,23 +70,23 @@ struct PaletteEditor: View {
                 
                 Section(header : Text("Remove Emoji") ,
                         content : {
-                            VStack {
-                                ForEach(chosenPalette.map({ String($0) }) ,
-                                        id : \.self) { emoji in
-                                            Text(emoji)
-                                                .onTapGesture {
-                                                    self.chosenPalette = self.document.removeEmoji(emoji ,
-                                                                                                   fromPalette : self.chosenPalette)
-                                            } // .onTapGesture {}
-                                } // ForEach()
-                            } // VStack {}
+                            Grid(chosenPalette.map { String($0) } ,
+                                 id : \.self) { emoji in
+                                    Text(emoji)
+                                        .font(Font.system(size: self.fontSize))
+                                        .onTapGesture {
+                                            self.chosenPalette = self.document.removeEmoji(emoji ,
+                                                                                           fromPalette : self.chosenPalette)
+                                    } // .onTapGesture {}
+                            } // Grid()
+                                .frame(height : self.height)
                 }) // Section(header: , content:) {}
             } // Form {}
         } // VStack {}
-        .onAppear(perform : {
-            self.paletteName = self.document.paletteNames[self.chosenPalette] ?? ""
-        }) // .onAppear(perform: {})
-     
+            .onAppear(perform : {
+                self.paletteName = self.document.paletteNames[self.chosenPalette] ?? ""
+            }) // .onAppear(perform: {})
+        
         
         
     } // var body: some View {}
