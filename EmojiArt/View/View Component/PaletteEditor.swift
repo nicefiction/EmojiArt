@@ -17,6 +17,7 @@ struct PaletteEditor: View {
     @EnvironmentObject var document: EmojiArtDocument
     
     @Binding var chosenPalette: String
+    @Binding var isShowingPaletteEditor: Bool
     
     @State private var paletteName: String = ""
     @State private var emojisToAdd: String = ""
@@ -38,9 +39,21 @@ struct PaletteEditor: View {
     
     var body: some View {
         VStack(spacing : 0) {
-            Text("Palette Editor")
-                .font(.headline)
-                .padding()
+            ZStack {
+                Text("Palette Editor")
+                    .font(.headline)
+                    .padding()
+                
+                HStack {
+                    Spacer()
+                    
+                    Button(action : { self.isShowingPaletteEditor.toggle() } ,
+                           label : {
+                            Text("Done")
+                                .padding(.horizontal)
+                    })
+                } // HStack {}
+            } // ZStack {}
             
             
             Divider()
