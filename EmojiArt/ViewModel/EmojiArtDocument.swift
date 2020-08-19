@@ -10,10 +10,12 @@ import SwiftUI
 import Combine
 
 
-class EmojiArtDocument: ObservableObject {
+class EmojiArtDocument: ObservableObject ,
+                        Hashable ,
+                        Identifiable {
     
-     // /////////////////////////
-    //  MARK: PROPERTY OBSERVERS
+     // ////////////////////////
+    //  MARK: PROPERTY WRAPPERS
     
     @Published private var emojiArt: EmojiArt
     @Published private(set) var backgroundImage: UIImage?
@@ -24,9 +26,9 @@ class EmojiArtDocument: ObservableObject {
     //  MARK: PROPERTIES
     
     static let palette: String = "🤞👻🌋🌞💞💦📚"
-    private static let untitled: String = "EmojiArtDocument.Untitled"
     private var autoSaveCancellable: AnyCancellable?
     private var fetchImageCancellable: AnyCancellable?
+    let id: UUID
     
     
     
@@ -42,17 +44,24 @@ class EmojiArtDocument: ObservableObject {
      // //////////////////////////
     //  MARK: INITIALIZER METHODS
     
-    init() {
-        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey : EmojiArtDocument.untitled)) ?? EmojiArt()
+    init(id: UUID? = nil) {
+        
+        self.id = id ?? UUID()
+        let defaultsKey = "EmojiArtDocument.\(self.id.uuidString)"
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey : defaultsKey)) ?? EmojiArt()
         
         autoSaveCancellable = $emojiArt.sink(receiveValue : { emojiArt in
             print("json = \(emojiArt.json?.utf8 ?? "nil")")
             UserDefaults.standard.set(emojiArt.json ,
-                                      forKey : EmojiArtDocument.untitled)
+                                      forKey : defaultsKey)
         })
-        fetchBackgroundImageData()   
+        fetchBackgroundImageData()
     } // init() {}
     
+    
+    
+     // /////////////////////////
+    //  MARK: PROPERTY OBSERVERS
     
     var backgroundURL: URL? {
         get {
@@ -104,8 +113,6 @@ class EmojiArtDocument: ObservableObject {
     } // func scaleEmoji() {}
     
     
-    
-    
     private func fetchBackgroundImageData() {
         backgroundImage = nil
         
@@ -150,9 +157,23 @@ class EmojiArtDocument: ObservableObject {
     } // private func fetchBackgroundImageData() {}
     
     
+    func hash(into hasher: inout Hasher) {
+        
+        hasher.combine(id)
+    }
     
     
-    
+    static func == (lhs: EmojiArtDocument ,
+                    rhs: EmojiArtDocument)
+        -> Bool {
+            
+            lhs.id == rhs.id
+    }
+
+
+
+
+
 } // class EmojiArtDocument: ObservableObject {}
 
 
