@@ -117,6 +117,20 @@ struct EmojiArtDocumentView: View {
                                 return self.drop(providers : providers ,
                                                  at : location)
                 } // .onDrop(of: , isTargeted:) {}
+                    
+                    .navigationBarItems(trailing :
+                        Button(action : {
+                            if
+                                let url = UIPasteboard.general.url {
+                                self.document.backgroundURL = url
+                            }
+                        } ,
+                               label : {
+                                Image(systemName: "doc.on.clipboard")
+                                    .imageScale(.large)
+                        }
+                    ) // Button()
+                ) // .navigationBarItems()
             } // GeometryReader { geometry in }
         } // VStack {}
     } // var body: some View {}
@@ -179,7 +193,9 @@ struct EmojiArtDocumentView: View {
         if
             let image = image ,
             image.size.width > 0 ,
-            image.size.height > 0 {
+            image.size.height > 0 ,
+            size.height > 0 ,
+            size.width > 0 {
             
             let hZoom = size.width / image.size.width
             let vZoom = size.height / image.size.height
