@@ -16,8 +16,8 @@ struct EmojiArtDocumentView: View {
     
     @ObservedObject var document: EmojiArtDocument
     
-    @State private var steadyStateZoomScale: CGFloat = 1.0
-    @State private var steadyStatePanOffset: CGSize =  .zero
+//    @State private var steadyStateZoomScale: CGFloat = 1.0
+//    @State private var steadyStatePanOffset: CGSize =  .zero
     @State private var chosenPalette: String = ""
     
     @GestureState private var gestureZoomScale: CGFloat = 1.0
@@ -35,12 +35,12 @@ struct EmojiArtDocumentView: View {
     //  MARK: COMPUTED PROPERTIES
     
     private var zoomScale: CGFloat {
-        steadyStateZoomScale * gestureZoomScale
+        document.steadyStateZoomScale * gestureZoomScale
     } // private var zoomScale: CGFloat {}
     
     
     private var panOffset: CGSize {
-        (steadyStatePanOffset + gesturePanOffset) * zoomScale
+        (document.steadyStatePanOffset + gesturePanOffset) * zoomScale
     } // private var panOffset: CGSize {}
     
     
@@ -199,8 +199,8 @@ struct EmojiArtDocumentView: View {
             
             let hZoom = size.width / image.size.width
             let vZoom = size.height / image.size.height
-            self.steadyStatePanOffset = CGSize.zero
-            self.steadyStateZoomScale = min(hZoom , vZoom)
+            self.document.steadyStatePanOffset = CGSize.zero
+            self.document.steadyStateZoomScale = min(hZoom , vZoom)
             
         } // if let {}
     } // private func zoomToFit(_: UIImage ,in: CGSize) {}
@@ -227,7 +227,7 @@ struct EmojiArtDocumentView: View {
                     ourGestureStateInOut = latestGestureScale
             } // .updating($gestureZoomScale) {}
                 .onEnded { finalGestureScale in
-                    self.steadyStateZoomScale *= finalGestureScale
+                    self.document.steadyStateZoomScale *= finalGestureScale
             } // .onEnded {}
     } // private func zoomGesture() -> some Gesture {}
     
@@ -240,7 +240,7 @@ struct EmojiArtDocumentView: View {
                     gesturePanOffset = latestDragGestureValue.translation / self.zoomScale
             } // .updating($gesturePanOffset) {}
                 .onEnded { finalDragGestureValue in
-                    self.steadyStatePanOffset = self.steadyStatePanOffset + (finalDragGestureValue.translation / self.zoomScale)
+                    self.document.steadyStatePanOffset = self.document.steadyStatePanOffset + (finalDragGestureValue.translation / self.zoomScale)
             } // .onEnded { finalDragGestureValue in }
     } // private func panGesture() -> some Gesture {}
     
