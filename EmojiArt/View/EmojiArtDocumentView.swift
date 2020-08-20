@@ -19,6 +19,8 @@ struct EmojiArtDocumentView: View {
 //    @State private var steadyStateZoomScale: CGFloat = 1.0
 //    @State private var steadyStatePanOffset: CGSize =  .zero
     @State private var chosenPalette: String = ""
+    @State private var explainBackgroundPaste: Bool = false
+    @State private var confirmBackgroundPaste: Bool = false
     
     @GestureState private var gestureZoomScale: CGFloat = 1.0
     @GestureState private var gesturePanOffset: CGSize = .zero
@@ -121,18 +123,35 @@ struct EmojiArtDocumentView: View {
                     .navigationBarItems(trailing :
                         Button(action : {
                             if
-                                let url = UIPasteboard.general.url {
-                                self.document.backgroundURL = url
-                            }
+                                let url = UIPasteboard.general.url ,
+                                url != self.document.backgroundURL {
+                                
+//                                self.document.backgroundURL = url
+                                self.confirmBackgroundPaste.toggle()
+                            } else {
+                                self.explainBackgroundPaste.toggle()
+                            } // if let url {} else {}
                         } ,
                                label : {
-                                Image(systemName: "doc.on.clipboard")
+                                Image(systemName : "doc.on.clipboard")
                                     .imageScale(.large)
-                        }
-                    ) // Button()
+                                    .alert(isPresented : self.$explainBackgroundPaste ,
+                                           content : {
+                                            return Alert(title         : Text("Paste Background") ,
+                                                         message       : Text("Copy the URL of an image to the clip board and tap this button to make it the background of your document .") ,
+                                                         dismissButton : .default(Text("OK")))
+                                    }) // .alert(isPresented: , content:)
+                        }) // Button(action: , label:)
                 ) // .navigationBarItems()
             } // GeometryReader { geometry in }
         } // VStack {}
+            .alert(isPresented : self.$confirmBackgroundPaste ,
+                   content : {
+                    Alert(title           : Text("Paste Background") ,
+                          message         : Text("Replace your background with \(UIPasteboard.general.url?.absoluteString ?? "nothing") .") ,
+                          primaryButton   : Alert.Button.default(Text("OK")) { self.document.backgroundURL = UIPasteboard.general.url } ,
+                          secondaryButton : Alert.Button.cancel())
+            }) // .alert(isPresented: ,content:)
     } // var body: some View {}
     
     

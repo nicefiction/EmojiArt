@@ -37,10 +37,13 @@ struct EmojiArtDocumentChooser: View {
                 } // ForEach(store.documents) { document in }
             } // List {}
                 .navigationBarTitle(self.store.name)
-                .navigationBarItems(leading : Button(action : { self.store.addDocument() } ,
-                                                     label : {
-                                                        Image(systemName: "plus")
-                                                            .imageScale(.large) }))
+                .navigationBarItems(leading :
+                    Button(action : { self.store.addDocument() } ,
+                           label : {
+                            Image(systemName: "plus")
+                                .imageScale(.large)
+                    }) // Button(action: , label: )
+            ) // .navigationBarItems(leading: )
         } // NavigationView {}
         
         
