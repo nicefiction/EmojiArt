@@ -21,8 +21,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view that provides the window contents.
         
-        // let contentView = EmojiArtDocumentView(document: EmojiArtDocument())
+        // let contentView = EmojiArtDocumentView(document: EmojiArtDocument()) // 👋
         let store = EmojiArtDocumentStore(named: "Emoji Art")
+//        store.addDocument()
+//        store.addDocument(named: "Hello World")
         let contentView = EmojiArtDocumentChooser().environmentObject(store)
 
         // Use a UIHostingController as window root view controller.

@@ -23,13 +23,25 @@ struct EmojiArtDocumentChooser: View {
     
     var body: some View {
         
-        List {
+        NavigationView {
             
-            ForEach(store.documents) { document in
+            List {
                 
-                Text(self.store.name(for : document))
-            } // ForEach(store.documents) { document in }
-        } // List {}
+                ForEach(store.documents) { document in
+                    
+                    NavigationLink(destination :
+                        EmojiArtDocumentView(document : document)
+                            .navigationBarTitle(self.store.name(for : document)) ,
+                                   
+                                   label : { Text(self.store.name(for : document)) })
+                } // ForEach(store.documents) { document in }
+            } // List {}
+                .navigationBarTitle(self.store.name)
+                .navigationBarItems(leading : Button(action : { self.store.addDocument() } ,
+                                                     label : {
+                                                        Image(systemName: "plus")
+                                                            .imageScale(.large) }))
+        } // NavigationView {}
         
         
         
