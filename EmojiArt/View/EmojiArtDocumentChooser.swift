@@ -44,12 +44,12 @@ struct EmojiArtDocumentChooser: View {
                 }) // .onDelete()
             } // List {}
                 .navigationBarTitle(self.store.name)
-                .navigationBarItems(leading :
-                    Button(action : { self.store.addDocument() } ,
-                           label : {
-                            Image(systemName: "plus")
-                                .imageScale(.large)
-                    }) // Button(action: , label: )
+                .navigationBarItems(
+                    leading : Button(action : { self.store.addDocument() } ,
+                                     label : {
+                                        Image(systemName: "plus")
+                                            .imageScale(.large) }) ,
+                    trailing : EditButton()
             ) // .navigationBarItems(leading: )
         } // NavigationView {}
         
