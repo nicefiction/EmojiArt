@@ -40,13 +40,13 @@ struct PaletteChooser: View {
                 .onTapGesture {
                     self.isShowingPaletteEditor = true
             } // .onTapGesture {}
-                .sheet(isPresented : $isShowingPaletteEditor ,
-                       content : {
-                        PaletteEditor(chosenPalette : self.$chosenPalette ,
-                                      isShowingPaletteEditor : self.$isShowingPaletteEditor )
-                            .environmentObject(self.document)
-                            .frame(minWidth : 300 ,
-                                   minHeight : 500)
+                .popover(isPresented : $isShowingPaletteEditor ,
+                         content : {
+                            PaletteEditor(chosenPalette : self.$chosenPalette ,
+                                          isShowingPaletteEditor : self.$isShowingPaletteEditor )
+                                .environmentObject(self.document)
+                                .frame(minWidth : 300 ,
+                                       minHeight : 500)
                 }) // .popover(isPresented:) {}
         } // HStack {}
             .fixedSize(horizontal : true ,
