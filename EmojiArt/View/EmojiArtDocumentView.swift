@@ -144,6 +144,8 @@ struct EmojiArtDocumentView: View {
                         }) // Button(action: , label:)
                 ) // .navigationBarItems()
             } // GeometryReader { geometry in }
+                .zIndex(-1.00)
+            
         } // VStack {}
             .alert(isPresented : self.$confirmBackgroundPaste ,
                    content : {
